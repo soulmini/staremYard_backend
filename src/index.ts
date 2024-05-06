@@ -1,11 +1,15 @@
 import express from 'express';
 import http from 'http';
+import cors from 'cors'
 import { spawn } from 'child_process';
 import { Server } from 'socket.io';
-// import login from './routes/auth/login';
-// import signup from './routes/auth/signup';
+import login from './routes/auth/login';
+import signup from './routes/auth/signup';
+
 
 const app = express();
+app.use(express.json());
+app.use(cors());
 const port = 3000;
 
 const server = http.createServer(app);
@@ -35,7 +39,7 @@ const options = [
   '-b:a', '128k',
   '-ar', '32000', // Adjust the audio sample rate as needed
   '-f', 'flv',
-  'rtmp://a.rtmp.youtube.com/live2/w0yv-1v24-4rp2-c3sa-3ze9',
+  'rtmp://a.rtmp.youtube.com/live2/xh7w-g3da-s6ga-ehry-6egw',
 ];
 
 const ffmpegProcess = spawn('ffmpeg', options);
@@ -97,8 +101,8 @@ app.get('/', (req, res) => {
 });
 
 // auth
-// app.use('/auth', login);
-// app.use('/auth', signup);
+app.use('/auth', login);
+app.use('/auth', signup);
 
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);

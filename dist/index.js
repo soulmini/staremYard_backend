@@ -5,11 +5,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const http_1 = __importDefault(require("http"));
+const cors_1 = __importDefault(require("cors"));
 const child_process_1 = require("child_process");
 const socket_io_1 = require("socket.io");
-// import login from './routes/auth/login';
-// import signup from './routes/auth/signup';
+const login_1 = __importDefault(require("./routes/auth/login"));
+const signup_1 = __importDefault(require("./routes/auth/signup"));
 const app = (0, express_1.default)();
+app.use(express_1.default.json());
+app.use((0, cors_1.default)());
 const port = 3000;
 const server = http_1.default.createServer(app);
 const io = new socket_io_1.Server(server, {
@@ -36,7 +39,7 @@ const options = [
     '-b:a', '128k',
     '-ar', '32000', // Adjust the audio sample rate as needed
     '-f', 'flv',
-    'rtmp://a.rtmp.youtube.com/live2/w0yv-1v24-4rp2-c3sa-3ze9',
+    'rtmp://a.rtmp.youtube.com/live2/xh7w-g3da-s6ga-ehry-6egw',
 ];
 const ffmpegProcess = (0, child_process_1.spawn)('ffmpeg', options);
 ffmpegProcess.stdout.on('data', (data) => {
@@ -91,8 +94,8 @@ app.get('/', (req, res) => {
     res.send('Hello from server!');
 });
 // auth
-// app.use('/auth', login);
-// app.use('/auth', signup);
+app.use('/auth', login_1.default);
+app.use('/auth', signup_1.default);
 server.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
